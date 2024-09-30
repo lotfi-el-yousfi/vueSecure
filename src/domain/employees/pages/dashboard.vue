@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { Employee, GetData, updateEmployee } from '@/domain/employees/service/ressources/employeeService'
+import {  GetData, updateEmployee } from '@/domain/employees/service/ressources/employeeService'
+import { useEmployee } from '../store/employeeStore'
+import { Employee } from '../model/Employee'
 
 const employees = reactive<Employee[]>([])
 const search = ref<string>('')
@@ -13,6 +15,8 @@ const editedItem = ref<Employee | null>(null)
 const formTitle = ref<string>('')
 const headers = ref<Array<{ title: string; align: string; key: string }>>([])
 
+const employeeStore = useEmployee()
+const token = employeeStore.token;
 onMounted(async () => {
   await loadEmployees()
 })
@@ -85,7 +89,7 @@ function updatePage(page: number) {
 }
 </script>
 <template>
-
+  {{ token }}
   <v-alert v-if="error" dense dismissible type="error" @input="error = ''">
     {{ error }}
   </v-alert>

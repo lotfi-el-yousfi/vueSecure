@@ -1,39 +1,41 @@
 <script lang="ts" setup>
-  import router from '@/router'
-  import { defineEmits, defineProps, ref } from 'vue'
+import router from '@/router'
+import { defineEmits, defineProps, ref } from 'vue'
 
-  const emit = defineEmits<{
-    (e: 'drawerClicked'): void
-  }>()
+const emit = defineEmits<{
+  (e: 'drawerClicked'): void
+}>()
 
-  defineProps<{
-    drawer: boolean
-  }>()
+defineProps<{
+  drawer: boolean
+}>()
 
-  const drawer = ref(false)
-  const login_logout = ref('login')
+const drawer = ref(false)
+const login_logout = ref('login')
 
-  function toggleDrawer () {
-    drawer.value = !drawer.value
-    emit('drawerClicked')
+function toggleDrawer() {
+  drawer.value = !drawer.value
+  emit('drawerClicked')
+}
+function isAuthenticated() {
+  const token = localStorage.getItem('jwt')
+  if (token) {
+    login_logout.value = 'Logout'
+    return true
   }
-  function isAuthenticated () {
-    const token = localStorage.getItem('jwt')
-    if (token) {
-      login_logout.value = 'Logout'
-      return true
-    }
-    return false
-  }
-  function logout () {
-    localStorage.setItem('jwt', '')
-    login_logout.value = 'login'
-    router.push({ name: 'login' })
-  }
+  router.push({ name: "login" });
 
-  onMounted(() => {
-    isAuthenticated()
-  })
+  return false
+}
+function logout() {
+  localStorage.setItem('jwt', '')
+  login_logout.value = 'login'
+  router.push({ name: 'login' })
+}
+
+onMounted(() => {
+  isAuthenticated()
+})
 </script>
 
 <template>

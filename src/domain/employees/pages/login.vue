@@ -3,9 +3,9 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Login } from '@/domain/employees/service/ressources/employeeService'
 
-const username = ref('')
-const password = ref('')
-const error = ref('')
+const username = ref<string>('')
+const password = ref<string>('')
+const error = ref<string>('')
 const valid = ref(true)
 
 const usernameRules = [
@@ -14,19 +14,20 @@ const usernameRules = [
 ]
 const passwordRules = [
   (v: string) => !!v || 'Password is required',
-  (v: string) => v.length >= 8 || 'Password must be at least 8 characters',
+  (v: string) => v.length >= 5 || 'Password must be at least 8 characters',
 ]
 const router = useRouter()
 
 const handelLogin = async () => {
   try {
-    Login().subscribe((token: any) => {
-      if (!token) {
-        return
-      }
-      localStorage.setItem('jwt', token)
-      router.push({ name: 'dashboard' })
-    })
+    Login(username.value, password.value)
+      .subscribe((token: any) => {
+        if (!token) {
+          return
+        }
+        console.log(token);
+        router.push({ name: 'dashboard' })
+      })
   } catch (error) {
     console.log(error)
   }
@@ -52,4 +53,5 @@ const handelLogin = async () => {
       </v-alert>
     </v-card-text>
   </v-card>
+
 </template>

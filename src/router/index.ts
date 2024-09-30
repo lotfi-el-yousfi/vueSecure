@@ -1,4 +1,6 @@
+import { useEmployee } from '@/domain/employees/store/employeeStore'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+
 
 const routes: RouteRecordRaw[] = [
 
@@ -24,15 +26,17 @@ const router = createRouter({
   routes,
 })
 
-// const authStore = useEmployee()
+router.beforeEach(async (to, from, next) => {
+  const employeeStore = useEmployee()
 
-// router.beforeEach(async (to, from, next) => {
-   // if (to.meta?.requiresAuth && !(authStore.isAuth())) {
-   //   next({ name: 'dashboard' })
-   // } else {
-   //   next()
-   // }
-// })
+  if (to.meta?.requiresAuth && !employeeStore.isAuthenticated) {
+    console.log("no jwt not autherized");
+    next({ name: 'login' })
+  } else {
+
+    next()
+  }
+})
 
 
 
