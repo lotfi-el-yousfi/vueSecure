@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import {  GetData, updateEmployee } from '@/domain/employees/service/ressources/employeeService'
+import { GetData, LoadEnpoints, updateEmployee } from '@/domain/employees/service/ressources/employeeService'
 import { useEmployee } from '../store/employeeStore'
 import { Employee } from '../model/Employee'
+
+const employeesStore = useEmployee()
 
 const employees = reactive<Employee[]>([])
 const search = ref<string>('')
@@ -11,15 +13,17 @@ const dialog = ref<boolean>(false)
 const editedIndex = ref<number>(-1)
 const error = ref<string>('')
 const editedItem = ref<Employee | null>(null)
+const endpoint = ref<string | undefined>()
 
 const formTitle = ref<string>('')
 const headers = ref<Array<{ title: string; align: string; key: string }>>([])
 
-const employeeStore = useEmployee()
-const token = employeeStore.token;
+
 onMounted(async () => {
-  await loadEmployees()
+  LoadEnpoints().subscribe(() => { })
+  endpoint.value = employeesStore.SelectedEndpoint
 })
+
 
 async function loadEmployees() {
   loading.value = true
@@ -89,7 +93,7 @@ function updatePage(page: number) {
 }
 </script>
 <template>
-  {{ token }}
+
   <v-alert v-if="error" dense dismissible type="error" @input="error = ''">
     {{ error }}
   </v-alert>
@@ -97,7 +101,7 @@ function updatePage(page: number) {
     loading-text="Loading... Please wait" :search="search" @update:page="updatePage">
     <template #top>
       <v-toolbar flat>
-        <v-toolbar-title>List of Employees</v-toolbar-title>
+        <v-toolbar-title> {{ endpoint ? `List of ${endpoint}` : '' }}</v-toolbar-title>
         <v-spacer />
         <v-text-field v-model="search" append-icon="mdi-magnify" clearable hide-details label="Search" single-line />
         <v-spacer />

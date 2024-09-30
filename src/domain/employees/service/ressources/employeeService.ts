@@ -1,10 +1,10 @@
+import Endpoint from './../../model/Endpoint.js';
 import { Employee } from '../../model/Employee'
 import axios from 'axios'
 import { Observable } from 'rxjs'
 import { useEmployee } from '../../store/employeeStore'
 
 const ApiUrl = 'http://localhost:9090'
-
 
 export function Login(username: string, password: string): Observable<string> {
   return new Observable(observer => {
@@ -22,9 +22,24 @@ export function Login(username: string, password: string): Observable<string> {
   })
 }
 
+export function LoadEnpoints(): Observable<Endpoint[]> {
+  return new Observable(observer => {
+    axios.post(ApiUrl + '/endpoints',
+      {}, {
+      headers: { Authorization: useEmployee().token }
+    })
+      .then(response => {
+        useEmployee().endpointsList = response?.data
+        observer.next(response?.data);
+      })
+      .catch(error => observer.error(error))
+  })
+}
 export function GetData(): Observable<Employee[]> {
   return new Observable(observer => {
-    axios.get(ApiUrl + '/employees/')
+    axios.get(ApiUrl + '/employees/', {
+      headers: { Authorization: 'Bearer ' + useEmployee().token }
+    })
       .then(response => observer.next(response?.data))
       .catch(error => observer.error(error))
   })

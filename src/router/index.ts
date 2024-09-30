@@ -8,6 +8,15 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('../domain/employees/pages/login.vue'),
+    meta: { requiresAuth: false },
+    beforeEnter: (to, from, next) => {
+      const token = useEmployee().token || localStorage.getItem('jwt') || ''
+      if (token) {
+        next({ name: 'dashboard' })
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/loginRxJS',
