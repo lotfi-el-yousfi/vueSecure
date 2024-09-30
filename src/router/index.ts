@@ -1,18 +1,40 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { setupLayouts } from 'virtual:generated-layouts'
-import { routes } from 'vue-router/auto-routes'
+const routes: RouteRecordRaw[] = [
 
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../domain/employees/pages/login.vue'),
+  },
+  {
+    path: '/loginRxJS',
+    name: 'loginRxJS',
+    component: () => import('../domain/employees/auth/view/login.vue'),
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../domain/employees/pages/dashboard.vue'),
+    meta: { requiresAuth: true },
+  },
+]
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  history: createWebHistory(),
+  routes,
 })
+
+// const authStore = useEmployee()
+
+// router.beforeEach(async (to, from, next) => {
+   // if (to.meta?.requiresAuth && !(authStore.isAuth())) {
+   //   next({ name: 'dashboard' })
+   // } else {
+   //   next()
+   // }
+// })
+
+
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
 router.onError((err, to) => {
