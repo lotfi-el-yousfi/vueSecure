@@ -42,7 +42,7 @@ const validate = () => {
         valid.value = false
     } else {
         Login(username.value, password.value).subscribe((d) => {
-            router.push({ "name": "dashboard", "params": {} })
+            router.push({ "name": "dashboard"  })
         })
     }
 }

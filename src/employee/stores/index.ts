@@ -20,8 +20,7 @@ export const useEmployee = defineStore('Employee', () => {
     const SetTable = (table_: string) => {
         selected_Table.value = table_
     }
-
-
+ 
     const setEndpoints = (Endpoints_: any) => {
         Endpoints.value = Endpoints_
     }
