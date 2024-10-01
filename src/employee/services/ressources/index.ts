@@ -47,7 +47,7 @@ export function Get_Endpoint(table: string): Observable<string[]> {
 }
 export function Post_Endpoint(table: string, paylaod: any): Observable<string[]> {
     return new Observable(observer => {
-        axios.post(ApiUrl + `${table}`,
+        axios.post(ApiUrl + `/${table}`,
             paylaod,
             {
                 headers: { Authorization: useEmployee().token }
@@ -60,7 +60,7 @@ export function Post_Endpoint(table: string, paylaod: any): Observable<string[]>
 }
 export function Delete_Endpoint(table: string, delete_params: any): Observable<string[]> {
     return new Observable(observer => {
-        axios.delete(ApiUrl + `${table}/${delete_params}`,
+        axios.delete(ApiUrl + `/${table}/${delete_params}`,
             {
                 headers: { Authorization: useEmployee().token }
             })
