@@ -1,6 +1,6 @@
 <template>
 
-    <v-app-bar app clipped-left color="primary" dark>
+    <v-app-bar app clipped-left>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         <v-toolbar-title>Application</v-toolbar-title>
         <v-spacer />
@@ -9,6 +9,9 @@
         </v-btn>
         <v-btn icon @click="login" v-else>
             <v-icon>mdi-login</v-icon>
+        </v-btn>
+        <v-btn icon @click="toggleTheme">
+            <v-icon>{{ $vuetify.theme.dark ? 'mdi-brightness-7' : 'mdi-brightness-4' }}</v-icon>
         </v-btn>
     </v-app-bar>
 
@@ -43,6 +46,16 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEmployee } from '../stores';
+
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+const toggleTheme = () => {
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+}
+
+
 const employeeStore = useEmployee()
 
 const isloggedIn = computed(() => {

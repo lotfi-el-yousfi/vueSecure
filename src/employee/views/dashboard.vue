@@ -59,7 +59,7 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template #item.actions="{ item }">
+            <template v-slot:item.actions="{ item }">
                 <v-icon class="me-2" size="small" @click="editItem(item)">
                     mdi-pencil
                 </v-icon>
@@ -144,7 +144,7 @@ onMounted(() => {
             //     { title: 'Delete', key: 'delete', sortable: false }
             // )
 
-            items.value = data; 
+            items.value = data;
             loadign.value = false
         })
 })

@@ -1,11 +1,10 @@
 <template>
-  <v-app>
-    <v-main>
-      <div style="margin: 20px">
+  <v-app >
+    <v-main >
+      <div style="margin: 20px" :color="$vuetify.theme.dark ? 'primary' : ''" dark>
         <appBar></appBar>
         <router-view />
       </div>
-
     </v-main>
   </v-app>
 </template>
