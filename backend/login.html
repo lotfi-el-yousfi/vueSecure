@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Exploit Endpoints</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login and Exploit Endpoints</h1>
+        <form id="login-form">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <button type="submit">Login</button>
+        </form>
+        <p id="jwt-token"></p>
+        <div id="endpoints-container"></div>
+        <script>
+            const form = document.getElementById('login-form');
+            const endpointsContainer = document.getElementById('endpoints-container');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                fetch('http://localhost:9090/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('jwt-token').innerHTML = `JWT Token: ${data.token}`;
+                    fetch('http://localhost:9090/endpoints', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(endpoints => {
+                        const endpointList = document.createElement('ul');
+                        endpointList.id = 'endpoint-list';
+                        endpoints.forEach(endpoint => {
+                            const endpointListItem = document.createElement('li');
+                            endpointListItem.innerHTML = `<p>${endpoint.method} ${endpoint.path}</p>`;
+                            const requestForm = document.createElement('form');
+                            requestForm.id = `form-${endpoint.path}`;
+                            requestForm.addEventListener('submit', (e) => {
+                                e.preventDefault();
+                                const formData = new FormData(requestForm);
+                                fetch(endpoint.path, {
+                                    method: endpoint.method,
+                                    headers: {
+                                        'Authorization': `Bearer ${data.token}`
+                                    },
+                                    body: formData
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    const requestResponse = document.createElement('div');
+                                    requestResponse.id = `response-${endpoint.path}`;
+                                    requestResponse.innerHTML = `<p>Response: ${JSON.stringify(data)}</p>`;
+                                    requestForm.parentElement.insertBefore(requestResponse, requestForm);
+                                })
+                                .catch(err => console.error(err));
+                            });
+                            const methodSelect = document.createElement('select');
+                            methodSelect.id = `method-${endpoint.path}`;
+                            ['GET', 'POST', 'PUT', 'DELETE'].forEach(method => {
+                                const methodOption = document.createElement('option');
+                                methodOption.value = method;
+                                methodOption.innerHTML = method;
+                                methodSelect.appendChild(methodOption);
+                            });
+                            requestForm.appendChild(methodSelect);
+                            const formDataInput = document.createElement('input');
+                            formDataInput.type = 'text';
+                            formDataInput.id = `data-${endpoint.path}`;
+                            requestForm.appendChild(formDataInput);
+                            const submitButton = document.createElement('button');
+                            submitButton.type = 'submit';
+                            submitButton.innerHTML = 'Send';
+                            requestForm.appendChild(submitButton);
+                            endpointListItem.appendChild(requestForm);
+                            endpointList.appendChild(endpointListItem);
+                        });
+                        endpointsContainer.appendChild(endpointList);
+                    })
+                    .catch(err => console.error(err));
+                })
+                .catch(err => console.error(err));
+            });
+        </script>
+    </div>
+</body>
+</html>
+
