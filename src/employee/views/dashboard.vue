@@ -1,95 +1,93 @@
-<template>
-    <v-data-table :headers="headers" :items="items" :sort-by="[{ key: 'calories', order: 'asc' }]">
-        <template v-slot:top>
-            <v-toolbar flat>
-                <v-toolbar-title>My CRUD</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ props }">
-                        <v-btn class="mb-2" color="primary" dark v-bind="props">
-                            New Item
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="text-h5">{{ formTitle }}</span>
-                        </v-card-title>
+<template> <v-card :title="`Dashboard for ${table_name}`" flat>
+        <template v-slot:text>
+            <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" variant="outlined"
+                hide-details single-line></v-text-field>
+        </template>
+        <v-data-table :search="search" :headers="headers" :items="items" :sort-by="[{ key: 'calories', order: 'asc' }]">
 
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col cols="12" md="4" sm="6">
-                                        <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="6">
-                                        <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="6">
-                                        <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="6">
-                                        <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="6">
-                                        <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card-text>
+            <template v-slot:top>
+                <v-toolbar flat>
+                    <v-toolbar-title>My CRUD</v-toolbar-title>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ props }">
+                            <v-btn class="mb-2" color="primary" dark v-bind="props">
+                                New Item
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                <span class="text-h5">{{ formTitle }}</span>
+                            </v-card-title>
 
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue-darken-1" variant="text" @click="close">
-                                Cancel
-                            </v-btn>
-                            <v-btn color="blue-darken-1" variant="text" @click="save">
-                                Save
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                    <v-card>
-                        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
-                            <v-spacer></v-spacer>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.actions="{ item }">
-            <v-icon class="me-2" size="small" @click="editItem(item)">
-                mdi-pencil
-            </v-icon>
-            <v-icon size="small" @click="deleteItem(item)">
-                mdi-delete
-            </v-icon>
-        </template>
-        <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize">
-                Reset
-            </v-btn>
-        </template>
-    </v-data-table>
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col v-for="header in headers" :key="header.key" cols="12">
+                                            <v-text-field v-model="editedItem[header.key]"
+                                                :label="header.title"></v-text-field>
+                                        </v-col>
+
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                                    Cancel
+                                </v-btn>
+                                <v-btn color="blue-darken-1" variant="text" @click="saveEditedElement">
+                                    Save
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
+                                <v-spacer></v-spacer>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-toolbar>
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon class="me-2" size="small" @click="editItem(item)">
+                    mdi-pencil
+                </v-icon>
+                <v-icon size="small" @click="deleteItem(item)">
+                    mdi-delete
+                </v-icon>
+            </template>
+
+            <template #no-data>
+                <v-btn color="primary" @click="dialog = false">
+                    Reset
+                </v-btn>
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { Get_Endpoint, LoadEndpoints } from '../services/ressources';
+import { Get_Endpoint, LoadEndpoints, Post_Endpoint } from '../services/ressources';
 import { useEmployee } from '../stores';
 const employeeStore = useEmployee()
 const dialog = ref(false)
+const table_name = ref(employeeStore.selected_Table)
 const dialogDelete = ref(false)
 const headers = ref([])
+const search = ref()
 const items = ref([])
 
 const editedIndex = ref(-1)
 const editedItem = ref({
-
 })
 const defaultItem = ref({
 
@@ -113,6 +111,12 @@ watch(dialogDelete, (val) => {
 
 
 const editItem = (item) => {
+
+}
+const saveEditedElement = () => {
+    Post_Endpoint(employeeStore.selected_Table, editedItem.value).subscribe(() => {
+        alert("Saved");
+    })
 
 }
 const deleteItem = (item) => { }
