@@ -34,7 +34,8 @@ export function LoadEndpoints(): Observable<string[]> {
 
 export function Get_Endpoint(table: string): Observable<string[]> {
     return new Observable(observer => {
-        axios.get(ApiUrl + `${table}`,
+        console.log(ApiUrl + `/${table}`);
+        axios.get(ApiUrl + `/${table}`,
             {
                 headers: { Authorization: useEmployee().token }
             })

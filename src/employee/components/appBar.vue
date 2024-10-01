@@ -67,8 +67,8 @@ const logout = () => {
 const selectTable = (table: string) => {
     employeeStore.SetTable(table)
 }
+
 onUpdated(() => {
     itemList = employeeStore.Endpoints
-    console.log("app mounted", itemList);
 })
 </script>

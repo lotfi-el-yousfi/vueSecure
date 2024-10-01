@@ -5,7 +5,7 @@ export const useEmployee = defineStore('Employee', () => {
     // State
     const token = ref(localStorage.getItem('token') || "");
     const Endpoints = ref();
-    const selected_Table = ref();
+    const selected_Table = ref("employees");
 
     // Getters
     const getToken = computed(() => token.value);
@@ -18,7 +18,7 @@ export const useEmployee = defineStore('Employee', () => {
         token.value = token_
     }
     const SetTable = (table_: string) => {
-        token.value = table_
+        selected_Table.value = table_
     }
 
 
