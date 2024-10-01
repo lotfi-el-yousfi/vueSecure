@@ -1,4 +1,5 @@
 
+import RouteNotFound from '@/employee/views/RouteNotFound.vue'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 
@@ -9,7 +10,7 @@ const routes: RouteRecordRaw[] = [
     name: 'login',
     component: () => import('@/employee/views/login.vue'),
     beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('token')  ) {
+      if (localStorage.getItem('token')) {
         next({ name: 'dashboard' })
       } else {
         next()
@@ -24,6 +25,11 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true
     }
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: RouteNotFound,
+  },
 
 ]
 const router = createRouter({
@@ -32,7 +38,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-   if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
     next({ name: 'login' })
   } else {
     next()

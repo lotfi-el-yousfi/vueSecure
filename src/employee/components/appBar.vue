@@ -18,20 +18,16 @@
     <v-navigation-drawer v-model="drawer" app clipped>
         <v-list dense>
             <v-list-item to="/" link>
-                <v-list-item-action>
+                <template v-slot:prepend>
                     <v-icon>mdi-home</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>Home</v-list-item-title>
-                </v-list-item-content>
+                </template>
+                <v-list-item-title> Home </v-list-item-title>
             </v-list-item>
             <v-list-item v-for="(item, index) in itemList" :key="index" @click="selectTable(item)">
-                <v-list-item-action>
-                    <v-icon>mdi-rout</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                </v-list-item-content>
+                <template v-slot:prepend>
+                    <v-icon>mdi-table</v-icon>
+                </template>
+                <v-list-item-title>{{ item }}</v-list-item-title>
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
@@ -79,6 +75,7 @@ const logout = () => {
 }
 const selectTable = (table: string) => {
     employeeStore.SetTable(table)
+    router.push({ name: "dashboard" })
 }
 
 onUpdated(() => {

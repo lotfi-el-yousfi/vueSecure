@@ -18,7 +18,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 export default createVuetify({
   theme: {
-    defaultTheme: 'light', // Set to 'dark' for dark theme
+    defaultTheme: 'dark', // Set to 'dark' for dark theme
     themes: {
       light: {
         dark: false, // Light theme
