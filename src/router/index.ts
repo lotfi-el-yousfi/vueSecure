@@ -18,6 +18,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/',
+    name: 'home',
+    component: () => import('@/employee/views/home.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/employee/views/dashboard.vue'),
