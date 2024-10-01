@@ -1,17 +1,15 @@
-import { useEmployee } from '@/domain/employees/store/employeeStore'
+
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 
-const routes: RouteRecordRaw[] = [
 
+const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../domain/employees/pages/login.vue'),
-    meta: { requiresAuth: false },
+    component: () => import('@/employee/views/login.vue'),
     beforeEnter: (to, from, next) => {
-      const token = useEmployee().token || localStorage.getItem('jwt') || ''
-      if (token) {
+      if (localStorage.getItem('token')  ) {
         next({ name: 'dashboard' })
       } else {
         next()
@@ -19,34 +17,27 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/loginRxJS',
-    name: 'loginRxJS',
-    component: () => import('../domain/employees/auth/view/login.vue'),
-  },
-  {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('../domain/employees/pages/dashboard.vue'),
-    meta: { requiresAuth: true },
+    component: () => import('@/employee/views/dashboard.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
+
 ]
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [...routes],
 })
 
-router.beforeEach(async (to, from, next) => {
-  const employeeStore = useEmployee()
-
-  if (to.meta?.requiresAuth && !employeeStore.isAuthenticated) {
-    console.log("no jwt not autherized");
+router.beforeEach((to, from, next) => {
+   if (to.meta.requiresAuth && !localStorage.getItem('token')) {
     next({ name: 'login' })
   } else {
-
     next()
   }
 })
-
 
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
@@ -69,3 +60,4 @@ router.isReady().then(() => {
 })
 
 export default router
+
