@@ -33,6 +33,15 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true
     }
   },
+
+  {
+    path: '/cardsDisplay',
+    name: 'cardsDisplay',
+    component: () => import('@/employee/views/cardsDisplay.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -58,7 +67,7 @@ router.beforeEach((to, from, next) => {
 router.onError((err, to) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
-       localStorage.setItem('vuetify:dynamic-reload', 'true')
+      localStorage.setItem('vuetify:dynamic-reload', 'true')
       location.assign(to.fullPath)
     } else {
       console.error('Dynamic import error, reloading page did not fix it', err)

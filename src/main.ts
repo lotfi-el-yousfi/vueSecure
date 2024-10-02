@@ -16,5 +16,5 @@ import { createApp } from 'vue'
 const app = createApp(App)
 
 registerPlugins(app)
-
+console.log(app);
 app.mount('#app')
