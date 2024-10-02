@@ -25,8 +25,7 @@ const writeData = (data) => {
 
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
-  console.log("\f");
-  console.log(req);
+
   const token = req.headers['authorization'];
   if (!token) return res.sendStatus(401);
 
@@ -103,9 +102,9 @@ const createCrudRoutes = (objectName) => {
   app.delete(`/${objectName}/:id`, authenticateToken, (req, res) => {
     const data = readData();
     if (!data[objectName]) return res.status(404).send(`${objectName} not found`);
-
+    console.log(objectName, req.params);
     const { id } = req.params;
-    const itemIndex = data[objectName].findIndex(item => item.id === parseInt(id));
+    const itemIndex = data[objectName].findIndex(item => parseInt(item.id) === parseInt(id));
 
     if (itemIndex === -1) return res.status(404).send(`${objectName.slice(0, -1)} not found`);
 
