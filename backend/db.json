@@ -1,24 +1,6 @@
 {
   "employees": [
     {
-      "id": 3,
-      "name": "hqzzfai4cc9",
-      "username": "98xbd",
-      "email": "p1xsqu11m@ztbn56uf1sp1.com"
-    },
-    {
-      "id": 4,
-      "name": "8uxz0z",
-      "username": "vo9vkvnw0a3c4",
-      "email": "q595tt@8vxr202b.com"
-    },
-    {
-      "id": 5,
-      "name": "801w3z7wnuxx65",
-      "username": "cvlyt6",
-      "email": "nehcwj4jv0ouec@7p4u851uy.com"
-    },
-    {
       "id": 6,
       "name": "2gvy3a6it7",
       "username": "4hjb4g93qgz",
@@ -587,6 +569,10 @@
       "name": "lt26z",
       "username": "283kk",
       "email": "eizcorfro@q9k8cwju8.com"
+    },
+    {
+      "id": "3003",
+      "name": "lotfi"
     }
   ],
   "products": [

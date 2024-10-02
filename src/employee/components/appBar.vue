@@ -23,11 +23,27 @@
                 </template>
                 <v-list-item-title> Home </v-list-item-title>
             </v-list-item>
-            <v-list-item v-for="(item, index) in itemList" :key="index" @click="selectTable(item)">
+            <v-list-item v-for="(item, index) in itemList" :key="index" @click="selectTable(item, 'dashboard')">
+
                 <template v-slot:prepend>
                     <v-icon>mdi-table</v-icon>
                 </template>
-                <v-list-item-title>{{ item }}</v-list-item-title>
+                <v-list-item-title>{{ item }} <v-chip size="x-small" color="red" variant="flat">
+                        dashboard
+                    </v-chip></v-list-item-title>
+
+            </v-list-item>
+            <v-list-item v-for="(item, index) in itemList" :key="index" @click="selectTable(item, 'cardsDisplay')">
+
+                <template v-slot:prepend>
+                    <v-icon>mdi-cards-playing-club-multiple-outline </v-icon>
+                </template>
+                <v-list-item-title>{{ item }}
+                    <v-chip size="x-small" color="green" variant="flat">
+                        cards
+                    </v-chip>
+                </v-list-item-title>
+
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
@@ -73,9 +89,9 @@ const logout = () => {
     employeeStore.setToken('')
     router.push({ name: "login" })
 }
-const selectTable = (table: string) => {
+const selectTable = (table: string, routename: string) => {
     employeeStore.SetTable(table)
-    router.push({ name: "dashboard" })
+    router.push({ name: routename })
 }
 
 onUpdated(() => {
