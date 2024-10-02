@@ -6,7 +6,7 @@
         </template> -->
         <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ props }">
-                <v-btn class="mb-2" color="primary" dark v-bind="props" style="float: right">
+                <v-btn class="mb-2" color="primary" dark v-bind="props"  >
                     New Item
                 </v-btn>
             </template>
@@ -51,13 +51,13 @@
         <v-row class="d-flex flex-wrap">
             <v-col cols="12" sm="6" md="4" lg="3" xl="2" v-for="item in items" :key="item.id">
                 <v-card class="pa-2 ma-2" outlined>
-                    <v-card-title  style="background-color: black">{{ item.name }}</v-card-title>
+                    <v-card-title  >{{ item.name }}</v-card-title>
                     <v-list density="compact">
                         <v-list-item v-for="(value, key) in item" :key="key">
                             <v-list-item-title>{{ key }}: {{ value }}</v-list-item-title>
                         </v-list-item>
                     </v-list>
-                    <v-card-actions style="background-color: black">
+                    <v-card-actions >
                         <v-btn color="blue" variant="text" @click="editItem(item)">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
@@ -127,8 +127,7 @@ const saveEditedElement = () => {
     })
 
 }
-const deleteItemConfirm = () => {
-    console.log("delete ", selected_item_delete.value);
+const deleteItemConfirm = () => { 
     Delete_Endpoint(employeeStore.selected_Table, selected_item_delete.value.id).subscribe(() => {
         items.value = items.value.filter(item => item.id !== selected_item_delete.value.id)
     })

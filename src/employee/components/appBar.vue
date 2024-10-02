@@ -44,6 +44,19 @@
                     </v-chip>
                 </v-list-item-title>
 
+
+            </v-list-item>
+            <v-list-item to="/statistic">
+                <template v-slot:prepend>
+                    <v-icon>mdi-chart-pie </v-icon>
+                </template>
+                <v-list-item-title>
+                    <v-chip size="x-small" color="blue" variant="flat">
+                        statistic
+                    </v-chip>
+                </v-list-item-title>
+
+
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
