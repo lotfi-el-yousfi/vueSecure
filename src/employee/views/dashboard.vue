@@ -1,5 +1,5 @@
 <template>
-    <v-card :title="`${table_name} Dashboard`" flat>
+    <v-card :title="`${selected_table} Dashboard`" flat>
         <template v-slot:text>
             <v-text-field v-model="search" label="Search" clearable prepend-inner-icon="mdi-magnify" variant="outlined"
                 hide-details single-line></v-text-field>
@@ -82,7 +82,10 @@ import { Get_Endpoint, LoadEndpoints, Post_Endpoint } from '../services/ressourc
 import { useEmployee } from '../stores';
 const employeeStore = useEmployee()
 const dialog = ref(false)
-const table_name = ref(employeeStore.selected_Table)
+const selected_table = computed(() => {
+    load_data()
+    return employeeStore.selected_Table;
+})
 const dialogDelete = ref(false)
 const headers = ref([])
 const search = ref()
@@ -113,6 +116,7 @@ watch(dialogDelete, (val) => {
 })
 
 
+
 const editItem = (item) => {
 
 }
@@ -124,12 +128,15 @@ const saveEditedElement = () => {
 }
 const deleteItem = (item) => { }
 
-
-onMounted(() => {
+const init = () => {
     LoadEndpoints().subscribe((r) => {
     })
-    console.log("wtf");
 
+    load_data()
+}
+
+const load_data = () => {
+    console.log("load data ", employeeStore.selected_Table);
     Get_Endpoint(employeeStore.selected_Table)
         .subscribe((data) => {
             headers.value = Object.keys(data[0]).map(key => ({
@@ -143,10 +150,13 @@ onMounted(() => {
             // headers.value.push(
             //     { title: 'Delete', key: 'delete', sortable: false }
             // )
-
+            console.log("items", data);
             items.value = data;
             loadign.value = false
         })
+}
+onMounted(() => {
+    init()
 })
 
 </script>
