@@ -134,8 +134,7 @@ const saveEditedElement = () => {
     })
 
 }
-const deleteItemConfirm = () => {
-    console.log("delete ", selected_item_delete.value);
+const deleteItemConfirm = () => { 
     Delete_Endpoint(employeeStore.selected_Table, selected_item_delete.value.id).subscribe(() => {
         items.value = items.value.filter(item => item.id !== selected_item_delete.value.id)
     })

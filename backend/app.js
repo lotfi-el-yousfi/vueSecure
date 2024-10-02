@@ -35,6 +35,15 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+app.post('/statistic', authenticateToken, (req, res) => {
+  console.log(res.headers);
+  const data = readData();
+  const statistic = Object.keys(data).map(objectName => {
+    return { name: objectName, length: data[objectName].length };
+  });
+  res.json(statistic);
+});
+
 app.post('/endpoints', authenticateToken, (req, res) => {
   console.log(res.headers);
   const data = readData();

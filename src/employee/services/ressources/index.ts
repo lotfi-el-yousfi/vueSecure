@@ -24,7 +24,7 @@ export function LoadEndpoints(): Observable<string[]> {
             headers: { Authorization: employeeStore.token }
         })
             .then(response => {
-                 employeeStore.setEndpoints(response?.data);
+                employeeStore.setEndpoints(response?.data);
                 observer.next(response?.data);
             })
             .catch(error => observer.error(error));
@@ -33,7 +33,7 @@ export function LoadEndpoints(): Observable<string[]> {
 
 export function Get_Endpoint(table: string): Observable<string[]> {
     return new Observable(observer => {
-         axios.get(ApiUrl + `/${table}`,
+        axios.get(ApiUrl + `/${table}`,
             {
                 headers: { Authorization: useEmployee().token }
             })
@@ -59,6 +59,19 @@ export function Post_Endpoint(table: string, paylaod: any): Observable<string[]>
 export function Delete_Endpoint(table: string, delete_params: any): Observable<string[]> {
     return new Observable(observer => {
         axios.delete(ApiUrl + `/${table}/${delete_params}`,
+            {
+                headers: { Authorization: useEmployee().token }
+            })
+            .then(response => {
+                observer.next(response?.data);
+            })
+            .catch(error => observer.error(error));
+    });
+}
+
+export function LoadStatistic(): Observable<string[]> {
+    return new Observable(observer => {
+        axios.post(ApiUrl + `/statistic`,
             {
                 headers: { Authorization: useEmployee().token }
             })

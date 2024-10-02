@@ -43,6 +43,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/statistic',
+    name: 'statistic',
+    component: () => import('@/employee/views/statistic.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: RouteNotFound,
