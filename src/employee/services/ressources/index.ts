@@ -71,12 +71,12 @@ export function Delete_Endpoint(table: string, delete_params: any): Observable<s
 
 export function LoadStatistic(): Observable<string[]> {
     return new Observable(observer => {
-        axios.post(ApiUrl + `/statistic`,
+        axios.post(ApiUrl + `/statistic`, {},
             {
                 headers: { Authorization: useEmployee().token }
             })
             .then(response => {
-                observer.next(response?.data);
+                 observer.next(response?.data);
             })
             .catch(error => observer.error(error));
     });

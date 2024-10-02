@@ -1,12 +1,6 @@
 {
   "employees": [
     {
-      "id": 6,
-      "name": "2gvy3a6it7",
-      "username": "4hjb4g93qgz",
-      "email": "sozormbdkd5ol9@y6wpfs927l8.com"
-    },
-    {
       "id": 7,
       "name": "t5kls9ezsa",
       "username": "a5xv9itvmvh5j",
@@ -1080,6 +1074,40 @@
       "id": "400",
       "name": "el yousfi",
       "price": "lotfi"
+    }
+  ],
+  "STUDENTS": [
+    {
+      "id": 1,
+      "name": "Student 1",
+      "age": 20
+    },
+    {
+      "id": 2,
+      "name": "Student 2",
+      "age": 21
+    },
+    {
+      "id": 3,
+      "name": "Student 3",
+      "age": 22
+    }
+  ],
+  "BOOKS": [
+    {
+      "id": 1,
+      "name": "Student 1",
+      "pages": 20
+    },
+    {
+      "id": 2,
+      "name": "Student 2",
+      "pages": 21
+    },
+    {
+      "id": 3,
+      "name": "Student 3",
+      "pages": 22
     }
   ]
 }

@@ -1,7 +1,8 @@
 <template>
     <div class="text-center">
-        <v-progress-circular :model-value="value" :rotate="360" :size="300" :width="15" color="teal">
-            {{ value }}
+        <v-progress-circular v-for="item in Statistics" :model-value="item.length" :rotate="360" :size="150" :width="15"
+            color="teal">
+            {{ item.length }} {{ item.name }}
         </v-progress-circular>
 
 
@@ -13,12 +14,12 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { LoadStatistic } from '../services/ressources';
 
 const value = ref(0)
-const getHeapStatistics = ref()
+const Statistics = ref()
 const interval = ref(null)
 
 onMounted(() => {
     LoadStatistic().subscribe((d) => {
-        getHeapStatistics.value = d
+        Statistics.value = d
         console.log(d);
     })
 })
