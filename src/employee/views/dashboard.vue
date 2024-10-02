@@ -4,8 +4,8 @@
             <v-text-field v-model="search" label="Search" clearable prepend-inner-icon="mdi-magnify" variant="outlined"
                 hide-details single-line></v-text-field>
         </template>
-        <v-data-table :search="search" :headers="headers" :items="items" :sort-by="[{ key: 'calories', order: 'asc' }]"
-            loading-text="Loading... Please wait" :loading="loadign">
+        <v-data-table :search="search" :headers="headers" :items="items" loading-text="Loading... Please wait"
+            height="400" density="compact" :loading="loadign">
 
             <template v-slot:top>
                 <v-toolbar flat>
@@ -37,7 +37,7 @@
 
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                                <v-btn color="blue-darken-1" variant="text" @click="closeDelete">
                                     Cancel
                                 </v-btn>
                                 <v-btn color="blue-darken-1" variant="text" @click="saveEditedElement">
@@ -59,13 +59,16 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
-                <v-icon class="me-2" size="small" @click="editItem(item)">
-                    mdi-pencil
-                </v-icon>
-                <v-icon size="small" @click="deleteItem(item)">
-                    mdi-delete
-                </v-icon>
+            <template #item="{ item }">
+                <tr>
+                    <td v-for="(value, key) in item" :key="key">{{ item[key] }}</td>
+                    <td> <v-icon class="me-2" size="small" @click="editItem(item)">
+                            mdi-pencil
+                        </v-icon><v-icon size="small" @click="dialogDelete = true; selected_item_delete = item">
+                            mdi-delete
+                        </v-icon>
+                    </td>
+                </tr>
             </template>
 
             <template #no-data>
@@ -78,7 +81,7 @@
 </template>
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { Get_Endpoint, LoadEndpoints, Post_Endpoint } from '../services/ressources';
+import { Delete_Endpoint, Get_Endpoint, LoadEndpoints, Post_Endpoint } from '../services/ressources';
 import { useEmployee } from '../stores';
 const employeeStore = useEmployee()
 const dialog = ref(false)
@@ -98,6 +101,9 @@ const editedItem = ref({
 const defaultItem = ref({
 
 })
+const selected_item_delete = ref({
+
+})
 
 const formTitle = computed(() => {
     return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
@@ -113,20 +119,28 @@ watch(dialogDelete, (val) => {
     if (!val) {
         closeDelete()
     }
-})
+}) 
 
-
-
+const closeDelete = () => {
+    dialogDelete.value = false
+}
 const editItem = (item) => {
-
+    dialog.value = true
 }
 const saveEditedElement = () => {
     Post_Endpoint(employeeStore.selected_Table, editedItem.value).subscribe(() => {
-        alert("Saved");
+        items.value.push(editedItem.value);
+        dialog.value = false
     })
 
 }
-const deleteItem = (item) => { }
+const deleteItemConfirm = () => {
+    console.log("delete ", selected_item_delete.value);
+    Delete_Endpoint(employeeStore.selected_Table, selected_item_delete.value.id).subscribe(() => {
+        items.value = items.value.filter(item => item.id !== selected_item_delete.value.id)
+    })
+    dialogDelete.value = false
+}
 
 const init = () => {
     LoadEndpoints().subscribe((r) => {
@@ -136,7 +150,6 @@ const init = () => {
 }
 
 const load_data = () => {
-    console.log("load data ", employeeStore.selected_Table);
     Get_Endpoint(employeeStore.selected_Table)
         .subscribe((data) => {
             headers.value = Object.keys(data[0]).map(key => ({
@@ -150,7 +163,6 @@ const load_data = () => {
             // headers.value.push(
             //     { title: 'Delete', key: 'delete', sortable: false }
             // )
-            console.log("items", data);
             items.value = data;
             loadign.value = false
         })

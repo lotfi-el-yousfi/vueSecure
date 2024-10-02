@@ -17,4 +17,8 @@ module.exports = {
   rules: {
     'vue/multi-word-component-names': 'off',
   },
+  // to allow the actions slot in dashboard
+  'vue/valid-v-slot': ['error', {
+    allowModifiers: true,
+  }],
 }

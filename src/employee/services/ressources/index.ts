@@ -24,8 +24,7 @@ export function LoadEndpoints(): Observable<string[]> {
             headers: { Authorization: employeeStore.token }
         })
             .then(response => {
-                console.log(response?.data);
-                employeeStore.setEndpoints(response?.data);
+                 employeeStore.setEndpoints(response?.data);
                 observer.next(response?.data);
             })
             .catch(error => observer.error(error));
@@ -34,8 +33,7 @@ export function LoadEndpoints(): Observable<string[]> {
 
 export function Get_Endpoint(table: string): Observable<string[]> {
     return new Observable(observer => {
-        console.log(ApiUrl + `/${table}`);
-        axios.get(ApiUrl + `/${table}`,
+         axios.get(ApiUrl + `/${table}`,
             {
                 headers: { Authorization: useEmployee().token }
             })
